@@ -25,12 +25,50 @@
 
 	</tr>
 	<tr>
-		<td><input type="text" id="mesto"></td>
-		<td><input type="text" id="stat"></td>
-		<td><button>Click in</button></td>
+		<td><input type="text" id="mesto" placeholder="City"></td>
+		<td><input type="text" id="stat" placeholder="State"></td>
+		<td><button type="button" onclick="getWeather()">Click in</button></td>
 	</tr>
 	</table>
 </div>
+<div id="resultTable">
+	<table align="center">
+		<tr>
+			<td>temperature: </td>
+			<td><div id="teplota"></div></td>
+		</tr>
+		<tr>
+			<td>Humidity: </td>
+			<td><div id="vlhkost"></div></td>
+		</tr>
+	</table>
+</div>
+<script type="text/javascript">
+	  function getWeather(){
+      let city = document.getElementById('mesto').value;
+      let state = document.getElementById('stat').value;
+      console.log("city: "+city+" country: "+state);
+      let appid="57bf6232faa9519a9104b00b35753580";
+      let req="http://api.openweathermap.org/data/2.5/forecast?";
+      req=req+"q="+city;
+      req=req+","+state;
+      req=req+"&mode=HTML";
+      req=req+"&appid="+appid;
+      console.log(req);
 
+      let xhttp= new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+      	if(this.readyState == 4 && this.status == 200){
+      		let obj=JSON.parse(this.responseText);
+      		document.getElementById("teplota").innerHTML=
+      			Math.round((obj.list[0].main.temp-273.15)*100)/100;   		
+      	}
+      };
+      xhttp.open("GET",req, true);
+      xhttp.send();
+    }
+
+
+</script>
 </body>
 </html>
