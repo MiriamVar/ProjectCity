@@ -4,19 +4,42 @@
 	<title>City</title>
 	<style type="text/css">
 		body {
-			background-color: #ccff66;
-			font-family: Verdana;
+			background-image: url('weather.jpg');
+			background-size: cover;
+  			background-attachment: fixed;
+  			background-repeat: no-repeat;
+  			-webkit-background-size: cover;
+  			-moz-background-size: cover;
+  			-o-background-size: cover;
+  			background-size: cover;
+  			background-position: center;
+ 		 	margin: 0;
+
+			font-family: Courier New;
 		}
 		#mainDiv{
 			text-align: center;
+			margin-top: 2%;
 		}
 		h1{
 			text-align: center;
+			margin-top: 3%;
 		}
+		#stat{
+			width: 45%;
+		}
+		#resultTable table {
+			width: 27%;
+			margin-top: 3%;
+		}
+		#resultTable table td {
+			padding-bottom: 10%;
+		}
+
 	</style>
 </head>
 <body>
-<h1> Information about your town </h1>
+<h1><b> Information about weather </b></h1>
 <div id="mainDiv">
 	<table align="center">
 	<tr>
@@ -34,12 +57,24 @@
 <div id="resultTable">
 	<table align="center">
 		<tr>
-			<td>temperature: </td>
+			<td>Temperature: </td>
 			<td><div id="teplota"></div></td>
 		</tr>
 		<tr>
 			<td>Humidity: </td>
 			<td><div id="vlhkost"></div></td>
+		</tr>
+		<tr>
+			<td>Pressure: </td>
+			<td><div id="tlak"></div></td>
+		</tr>
+		<tr>
+			<td>Wind: </td>
+			<td><div id="vietor"></div></td>
+		</tr>
+		<tr>
+			<td>Weather: </td>
+			<td><div id="pocasie"></div></td>
 		</tr>
 	</table>
 </div>
@@ -47,25 +82,35 @@
 	  function getWeather(){
       let city = document.getElementById('mesto').value;
       let state = document.getElementById('stat').value;
+      let reg = RegExp("^([a-zA-Z(š|č|ť|ž|ý|á|í|é|Š|Č|Ť|Ž|Ý|Á|É|Í|ú|Ú)])+$");
       console.log("city: "+city+" country: "+state);
-      let appid="57bf6232faa9519a9104b00b35753580";
-      let req="http://api.openweathermap.org/data/2.5/forecast?";
-      req=req+"q="+city;
-      req=req+","+state;
-      req=req+"&mode=HTML";
-      req=req+"&appid="+appid;
-      console.log(req);
-
-      let xhttp= new XMLHttpRequest();
-      xhttp.onreadystatechange = function(){
-      	if(this.readyState == 4 && this.status == 200){
-      		let obj=JSON.parse(this.responseText);
-      		document.getElementById("teplota").innerHTML=
-      			Math.round((obj.list[0].main.temp-273.15)*100)/100;   		
+  	  if (city.length>1 && reg.test(city)) {
+  	  	let req="http://api.openweathermap.org/data/2.5/forecast?q=";
+      	req=req+city;
+      	if (state.length==2 && reg.test(state)) {
+      	req=req+","+state;
       	}
-      };
-      xhttp.open("GET",req, true);
-      xhttp.send();
+      	req=req+"&mode=HTML";
+      	req=req+"&appid=57bf6232faa9519a9104b00b35753580";
+      	console.log(req);
+
+      	let xhttp= new XMLHttpRequest();
+      	xhttp.onreadystatechange = function(){
+      		if(this.readyState == 4 && this.status == 200){
+      			let obj=JSON.parse(this.responseText);
+      			document.getElementById("teplota").innerHTML=
+      			Math.round((obj.list[0].main.temp-273.15)*100)/100+" °C"; 
+      			document.getElementById("vlhkost").innerHTML=obj.list[0].main.humidity+" %";
+      			document.getElementById("tlak").innerHTML=obj.list[0].main.pressure+" hPa";
+      			document.getElementById("vietor").innerHTML=obj.list[0].wind.speed+" m/s";
+      			document.getElementById("pocasie").innerHTML=obj.list[0].weather[0].description;
+
+      		}
+      	};
+      	xhttp.open("GET",req, true);
+      	xhttp.send();
+
+  	  }
     }
 
 

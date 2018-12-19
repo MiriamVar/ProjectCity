@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style type="text/css">
+      body{
+        background-color: rgb(204, 153, 255);
+        font-family: Verdana;
+      }
+    </style>
+</head>
+
+<body>  
+
+<div id="centerBox" align="center">
+  <h1>Kurzová kalkulačka</h1>
+  <table>
+    <tr>
+      <td><input type="text" placeholder="Amount" id="money"></td>
+      <td><input type="button" onclick="getRate()" value="Send"></td>
+    </tr>
+
+    <tr>
+     <td><label>USD: </label></td>
+     <td><div id="toUSD"></div></td> 
+    </tr>
+
+    <tr>
+      <td><label>HUF: </label></td>
+      <td><div id="toHUF"></div></td> 
+    </tr>
+
+    <tr>
+      <td><label>PLN: </label></td>
+      <td><div id="toPLN"></div></td> 
+    </tr>
+
+    <tr>
+      <td><label>RUB: </label></td>
+      <td><div id="toRUB"></div></td>
+    </tr>
+  </table>
+</div>
+
+<div id="anotherTable" align="center">
+  <h2>Vyber</h2>
+  <table>
+    <tr>
+      <td><label>Mena</label></td>
+      <td><select id="mena">
+        <option value="EUR">EUR</option>
+        <option value="USD">USD</option>
+        <option value="PLN">PLN</option>
+        <option value="GBP">GBP</option>
+      </select></td>
+    </tr>
+  </table>
+</div>
+
+<script>
+    function getRate() {
+    let money = document.getElementById('money').value;
+    let appid="1bb0aff1f8b21c79723aefa5140f4477";
+    let req="http://data.fixer.io/api/latest?access_key=";
+    req= req+appid;
+    console.log(req);
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       let obj=JSON.parse(this.responseText);
+       document.getElementById("toUSD").innerHTML = obj.rates.USD*money;
+       document.getElementById("toHUF").innerHTML = obj.rates.HUF*money;
+       document.getElementById("toRUB").innerHTML = obj.rates.RUB*money;
+       document.getElementById("toPLN").innerHTML = obj.rates.PLN*money;
+       }
+    };
+    xhttp.open("GET", req , true);
+    xhttp.send();
+
+
+
+    }
+
+</script>
+
+
+</body>
+</html>
