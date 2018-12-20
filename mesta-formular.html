@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>City</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<style type="text/css">
 		body {
 			background-image: url('weather.jpg');
@@ -35,6 +36,9 @@
 		#resultTable table td {
 			padding-bottom: 10%;
 		}
+		button{
+			border: none;
+		}
 
 	</style>
 </head>
@@ -54,7 +58,7 @@
 	</tr>
 	</table>
 </div>
-<div id="resultTable">
+<div id="resultTable" style="visibility: hidden;">
 	<table align="center">
 		<tr>
 			<td>Temperature: </td>
@@ -80,11 +84,12 @@
 </div>
 <script type="text/javascript">
 	  function getWeather(){
+	  document.getElementById("resultTable").style.visibility="visible";
       let city = document.getElementById('mesto').value;
       let state = document.getElementById('stat').value;
       let reg = RegExp("^([a-zA-Z(š|č|ť|ž|ý|á|í|é|Š|Č|Ť|Ž|Ý|Á|É|Í|ú|Ú)])+$");
       console.log("city: "+city+" country: "+state);
-  	  if (city.length>1 && reg.test(city)) {
+  	  if (city.length>1 && reg.test(city)|| (/\s/).test(city)) {
   	  	let req="http://api.openweathermap.org/data/2.5/forecast?q=";
       	req=req+city;
       	if (state.length==2 && reg.test(state)) {
@@ -106,14 +111,15 @@
       			document.getElementById("pocasie").innerHTML=obj.list[0].weather[0].description;
 
       		}
+
       	};
       	xhttp.open("GET",req, true);
       	xhttp.send();
-
   	  }
-    }
 
-
+   	 }
 </script>
 </body>
 </html>
+
+
