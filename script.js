@@ -5,7 +5,7 @@
       let state = document.getElementById('stat').value;
       let reg = RegExp("^([a-zA-Z(š|č|ť|ž|ý|á|í|é|Š|Č|Ť|Ž|Ý|Á|É|Í|ú|Ú)])+$");
       console.log("city: "+city+" country: "+state);
-  	  if (city.length>1 && (reg.test(city)|| (/\s/).test(city))) {
+  	  if (city.length>1 && ( reg.test(city)|| (/\s/).test(city) ) ) {
   	  	let req="http://api.openweathermap.org/data/2.5/forecast?q=";
       	req=req+city;
       	if (state.length==2 && reg.test(state)) {
